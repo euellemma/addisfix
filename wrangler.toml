@@ -1,0 +1,7 @@
+name = "addisfix-prototype"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-08-13"
+
+[vars]
+ENVIRONMENT = "production"
+APP_NAME = "Addis Fix Prototype"

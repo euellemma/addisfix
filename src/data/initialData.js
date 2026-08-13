@@ -1,0 +1,122 @@
+export const INITIAL_INCIDENTS = [
+  {
+    id: "AF-2026-081",
+    category: "Pothole & Asphalt Damage",
+    defectType: "pothole",
+    subcity: "Kirkos",
+    landmark: "Meshualekia near Commercial Bank of Ethiopia",
+    agency: "AACRA",
+    severity: 85,
+    status: "In-Progress",
+    urgency: 3,
+    description: "Deep post-rain pothole (approx 25cm depth) causing vehicle suspension damage and severe bottleneck traffic.",
+    coords: [9.0125, 38.7580],
+    reportedAt: "2026-08-13 09:15",
+    sla: "12 Hours Remaining",
+    reporter: "+251911***23"
+  },
+  {
+    id: "AF-2026-082",
+    category: "Water Pipe Burst",
+    defectType: "water_utility",
+    subcity: "Bole",
+    landmark: "Bole Medhanialem behind Edna Mall",
+    agency: "AAWSA",
+    severity: 92,
+    status: "Reported",
+    urgency: 4,
+    description: "Main clean water supply line leak flooding sidewalk and reducing pressure to nearby residential blocks.",
+    coords: [8.9985, 38.7860],
+    reportedAt: "2026-08-13 11:30",
+    sla: "4 Hours Remaining (Urgent)",
+    reporter: "+251922***89"
+  },
+  {
+    id: "AF-2026-083",
+    category: "Blocked Drainage & Flooding",
+    defectType: "drainage",
+    subcity: "Arada",
+    landmark: "Piazza near Municipal Building",
+    agency: "AACRA",
+    severity: 78,
+    status: "Triaged",
+    urgency: 3,
+    description: "Storm drain clogged with plastic waste causing localized street flooding during rain showers.",
+    coords: [9.0350, 38.7520],
+    reportedAt: "2026-08-12 16:45",
+    sla: "24 Hours Remaining",
+    reporter: "+251930***12"
+  },
+  {
+    id: "AF-2026-084",
+    category: "Solid Waste Accumulation",
+    defectType: "garbage",
+    subcity: "Addis Ketema",
+    landmark: "Mercato Raguel Church intersection",
+    agency: "Sanitation",
+    severity: 65,
+    status: "In-Progress",
+    urgency: 2,
+    description: "Overflowing trash skip obstructing pedestrian path for over 3 days.",
+    coords: [9.0310, 38.7390],
+    reportedAt: "2026-08-12 14:00",
+    sla: "18 Hours Remaining",
+    reporter: "+251912***55"
+  },
+  {
+    id: "AF-2026-085",
+    category: "Fallen Utility Wire",
+    defectType: "power_utility",
+    subcity: "Yeka",
+    landmark: "Megenagna Roundabout near Zefmesh Grand Mall",
+    agency: "EEU",
+    severity: 96,
+    status: "Reported",
+    urgency: 4,
+    description: "Low hanging power cable poses electrical hazard to high-top vehicles.",
+    coords: [9.0220, 38.8010],
+    reportedAt: "2026-08-13 10:05",
+    sla: "2 Hours Remaining (Critical)",
+    reporter: "+251911***90"
+  },
+  {
+    id: "AF-2026-086",
+    category: "Damaged Sidewalk",
+    defectType: "road_damage",
+    subcity: "Lideta",
+    landmark: "Near Lideta High Court",
+    agency: "AACRA",
+    severity: 40,
+    status: "Resolved",
+    urgency: 1,
+    description: "Broken concrete pavers repaired by field maintenance unit.",
+    coords: [9.0110, 38.7410],
+    reportedAt: "2026-08-10 08:30",
+    sla: "Completed on Time",
+    reporter: "+251944***01"
+  }
+];
+
+export const DEFECT_CATEGORIES = [
+  { value: "pothole", label: "Pothole & Asphalt Structural Damage", agency: "AACRA", categoryName: "Pothole & Asphalt Damage" },
+  { value: "garbage", label: "Garbage / Solid Waste Accumulation", agency: "Sanitation", categoryName: "Solid Waste Accumulation" },
+  { value: "drainage", label: "Blocked Drainage & Stormwater Flooding", agency: "AACRA", categoryName: "Blocked Drainage" },
+  { value: "road_damage", label: "Damaged Sidewalk / Road Barrier", agency: "AACRA", categoryName: "Damaged Sidewalk/Road" },
+  { value: "delayed_build", label: "Overlooked / Delayed Construction", agency: "AACRA", categoryName: "Overlooked Construction" },
+  { value: "water_utility", label: "Water Pipe Leakage / Burst (AAWSA)", agency: "AAWSA", categoryName: "Water Pipe Leakage" },
+  { value: "power_utility", label: "Fallen Electric Wire / Utility Pole (EEU)", agency: "EEU", categoryName: "Fallen Utility Wire" },
+  { value: "hazard", label: "Emergency Fire / Safety Risk", agency: "City Administration", categoryName: "Safety & Fire Hazard" }
+];
+
+export const SUBCITIES = [
+  "Bole",
+  "Kirkos",
+  "Arada",
+  "Addis Ketema",
+  "Nifas Silk-Lafto",
+  "Yeka",
+  "Gullele",
+  "Lideta",
+  "Kolfe Keraniyo",
+  "Akaky Kaliti"
+];
