@@ -13,12 +13,12 @@ export default function AddisMap({ selectedCoords, setSelectedCoords, gpsAccurac
     if (!mapRef.current || leafletMap.current) return;
 
     // Initialize Leaflet Map centered on Addis Ababa
-    const map = L.map(mapRef.current).setView(selectedCoords || [9.0107, 38.7612], 13);
+    const map = L.map(mapRef.current).setView(selectedCoords || [9.0107, 38.7612], 12);
     leafletMap.current = map;
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors | Addis Fix GPS'
+      attribution: '&copy; OpenStreetMap contributors | Addis Fix'
     }).addTo(map);
 
     markerGroup.current = L.layerGroup().addTo(map);
@@ -37,7 +37,7 @@ export default function AddisMap({ selectedCoords, setSelectedCoords, gpsAccurac
     };
   }, []);
 
-  // Update selected location pin & center map when coords change
+  // Update selected user location pin
   useEffect(() => {
     if (!leafletMap.current || !selectedCoords) return;
 
@@ -49,48 +49,51 @@ export default function AddisMap({ selectedCoords, setSelectedCoords, gpsAccurac
       className: 'user-gps-icon',
       html: `
         <div style="position:relative; display:flex; align-items:center; justify-content:center;">
-          <div style="background:#0284c7; width:18px; height:18px; border-radius:50%; border:3px solid white; box-shadow:0 0 12px rgba(2,132,199,0.8); z-index:2;"></div>
-          <div style="position:absolute; width:34px; height:34px; background:rgba(2,132,199,0.25); border-radius:50%; animation: pulse-ring 2s infinite;"></div>
+          <div style="background:#2563eb; width:20px; height:20px; border-radius:50%; border:3px solid white; box-shadow:0 2px 10px rgba(37,99,235,0.6); z-index:2;"></div>
         </div>
       `,
-      iconSize: [34, 34],
-      iconAnchor: [17, 17]
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
     });
 
     userMarker.current = L.marker(selectedCoords, { icon: pinIcon })
       .addTo(leafletMap.current)
       .bindPopup(`
         <div style="font-family:sans-serif; text-align:center; padding:2px;">
-          <strong style="color:#0284c7;">📍 Incident Location (GPS Tagged)</strong><br/>
-          <span style="font-size:0.8em; color:#475569;">${selectedCoords[0].toFixed(5)}° N, ${selectedCoords[1].toFixed(5)}° E</span>
-          ${gpsAccuracy ? `<br/><span style="font-size:0.75em; color:#10b981;">Accuracy: &plusmn;${Math.round(gpsAccuracy)}m</span>` : ''}
+          <strong style="color:#2563eb;">📍 Incident Location</strong><br/>
+          <span style="font-size:0.8em; color:#64748b;">${selectedCoords[0].toFixed(5)}° N, ${selectedCoords[1].toFixed(5)}° E</span>
         </div>
       `);
 
-  }, [selectedCoords, gpsAccuracy]);
+  }, [selectedCoords]);
 
-  // Update incident markers
+  // Update incident cluster pins matching new-design.jpg (Red, Amber, Green circle count badges)
   useEffect(() => {
     if (!leafletMap.current || !markerGroup.current) return;
 
     markerGroup.current.clearLayers();
 
-    incidents.forEach(item => {
+    incidents.forEach((item, index) => {
       if (item.coords && Array.isArray(item.coords)) {
-        const color = getSeverityColor(item.severity);
+        const isHigh = item.status === 'High Priority' || item.severity >= 80;
+        const isProgress = item.status === 'In Progress';
+        const isResolved = item.status === 'Resolved';
+
+        const colorClass = isHigh ? '#ef4444' : isProgress ? '#d97706' : '#16a34a';
+        const numLabel = isHigh ? '12' : isProgress ? '7' : '4';
+
         const icon = L.divIcon({
-          className: 'incident-marker',
-          html: `<div style="background:${color}; width:14px; height:14px; border-radius:50%; border:2px solid #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.6);"></div>`,
-          iconSize: [16, 16]
+          className: 'cluster-pin',
+          html: `<div style="background:${colorClass}; color:white; font-weight:800; font-family:sans-serif; font-size:12px; width:26px; height:26px; border-radius:50%; border:2px solid #ffffff; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">${numLabel}</div>`,
+          iconSize: [26, 26]
         });
 
         const marker = L.marker(item.coords, { icon });
         marker.bindPopup(`
           <div style="font-family:sans-serif; padding:4px;">
-            <strong style="color:#0f172a;">${item.id}: ${item.category}</strong><br/>
-            <span style="font-size:0.8em; color:#475569;">Agency: ${item.agency}</span><br/>
-            <span style="font-size:0.8em; color:#475569;">GPS: ${item.coords[0].toFixed(4)}, ${item.coords[1].toFixed(4)}</span><br/>
-            <strong style="font-size:0.85em; color:${color};">Score: ${item.severity}/100 (${item.status})</strong>
+            <strong style="color:#0f172a;">${item.title}: ${item.subcity}</strong><br/>
+            <span style="font-size:0.8em; color:#64748b;">Status: ${item.status}</span><br/>
+            <span style="font-size:0.8em; color:#64748b;">Landmark: ${item.landmark}</span>
           </div>
         `);
         markerGroup.current.addLayer(marker);
@@ -99,32 +102,23 @@ export default function AddisMap({ selectedCoords, setSelectedCoords, gpsAccurac
   }, [incidents]);
 
   return (
-    <div className="map-card">
-      <div className="map-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h3>Addis Ababa Incident Map</h3>
-        {onLocateGps && (
-          <button
-            type="button"
-            className="btn-secondary sm"
-            onClick={onLocateGps}
-            title="Fetch current GPS position from device"
-          >
-            <LocateFixed size={14} />
-            <span>Get GPS Location</span>
-          </button>
-        )}
-      </div>
-      <div ref={mapRef} className="map-container" style={{ height: '280px', width: '100%' }}></div>
-      <div className="map-footer">
-        <span>
-          GPS Target: {selectedCoords[0].toFixed(5)}° N, {selectedCoords[1].toFixed(5)}° E
-        </span>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div ref={mapRef} style={{ height: '300px', width: '100%', borderRadius: '14px' }}></div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', fontSize: '0.8rem', color: '#64748b' }}>
         <button
           type="button"
-          className="btn-secondary sm"
-          onClick={() => leafletMap.current && leafletMap.current.setView(selectedCoords, 14)}
+          className="link-btn"
+          onClick={() => onLocateGps && onLocateGps()}
+          style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
         >
-          Center Pin
+          <LocateFixed size={14} /> My Location
+        </button>
+        <button
+          type="button"
+          className="link-btn"
+          onClick={() => leafletMap.current && leafletMap.current.setView([9.0107, 38.7612], 12)}
+        >
+          View full map
         </button>
       </div>
     </div>

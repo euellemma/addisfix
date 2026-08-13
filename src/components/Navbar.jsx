@@ -1,40 +1,36 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { UserCheck, ShieldCheck } from 'lucide-react';
+import { UserCheck, ShieldCheck, BarChart2 } from 'lucide-react';
 
 export default function Navbar() {
   return (
     <header className="site-header">
       <div className="header-container">
-        <div className="brand">
-          <div className="brand-badge">
-            <span className="pulse-dot"></span>
-            <span>Addis Ababa CivicTech</span>
+        <div className="brand-group">
+          <div className="brand-icon-box">
+            <BarChart2 size={20} />
           </div>
-          <h1 className="brand-title">
-            Addis Fix <span className="badge-tag">React Prototype</span>
-          </h1>
-          <p className="brand-subtitle">Structured Incident Triage & Inter-Agency Maintenance Tracker</p>
+          <span className="brand-title">Addis Fix</span>
         </div>
 
         <div className="portal-nav-group">
-          {/* Reporter Portal (Entry point /) */}
+          {/* Reporter Portal (/) */}
           <NavLink
             to="/"
             end
             className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}
           >
-            <UserCheck size={18} />
-            <span>Citizen Reporter (/)</span>
+            <UserCheck size={17} />
+            <span>Reporter App (/)</span>
           </NavLink>
 
-          {/* Admin Portal (Entry point /admin) */}
+          {/* Admin Portal (/admin) */}
           <NavLink
             to="/admin"
             className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}
           >
-            <ShieldCheck size={18} />
-            <span>Agency Admin (/admin)</span>
+            <ShieldCheck size={17} />
+            <span>Admin Console (/admin)</span>
           </NavLink>
         </div>
       </div>
